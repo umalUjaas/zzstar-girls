@@ -1,0 +1,66 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # You can change this to your main branch name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Build Project
+      run: |
+        # Add your build commands here
+
+  static-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Install Semgrep
+      run: |
+        # Install Semgrep
+        curl -sL https://semgrep.dev/install.sh | sh
+        export PATH=$PATH:$HOME/.local/bin
+
+    - name: Run Static Analysis
+      run: |
+        # Run Semgrep static analysis
+        semgrep --config my-semgrep-config.yml  # Add your Semgrep config file
+
+  build-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Build Docker Image
+      run: |
+        # Add your Docker build commands here
+        docker build -t your-docker-image:latest .
+
+  deploy-to-kubernetes:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Configure Kubectl
+      uses: azure/k8s-set-context@v1
+      with:
+        kubeconfig: ${{ secrets.KUBE_CONFIG }}
+
+    - name: Deploy to Kubernetes
+      run: |
+        # Add your Kubernetes deployment commands here
+        kubectl apply -f your-kubernetes-manifest.yaml  # Add your manifest file
+
