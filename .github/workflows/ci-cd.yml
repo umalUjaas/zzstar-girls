@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # You can change this to your main branch name
+      - main 
 
 jobs:
   build:
@@ -61,6 +61,5 @@ jobs:
 
     - name: Deploy to Kubernetes
       run: |
-        # Add your Kubernetes deployment commands here
-        kubectl apply -f your-kubernetes-manifest.yaml  # Add your manifest file
+       
 
