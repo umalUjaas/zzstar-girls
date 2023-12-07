@@ -15,7 +15,6 @@ jobs:
 
     - name: Build Project
       run: |
-        # Add your build commands here
 
   static-analysis:
     runs-on: ubuntu-latest
@@ -43,9 +42,19 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build Docker Image
-      run: |
-        # Add your Docker build commands here
-        docker build -t your-docker-image:latest .
+      rules:
+  - id: insecure-subprocess-call
+    patterns:
+      - pattern: |
+          subprocess.call(os.getenv("COMMAND"))
+    message: "Avoid using subprocess.call with user input"
+
+  - id: hardcoded-secret
+    patterns:
+      - pattern: |
+          SECRET_KEY = "supersecret"
+    message: "Avoid hardcoding sensitive information like secret keys"
+
 
   deploy-to-kubernetes:
     runs-on: ubuntu-latest
